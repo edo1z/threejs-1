@@ -5,11 +5,18 @@ settings:
   excludeLinksFromLockfile: false
 
 devDependencies:
+  cannon-es:
+    specifier: ^0.20.0
+    version: 0.20.0
   three:
     specifier: ^0.160.0
     version: 0.160.0
 
 packages:
+
+  /cannon-es@0.20.0:
+    resolution: {integrity: sha512-eZhWTZIkFOnMAJOgfXJa9+b3kVlvG+FX4mdkpePev/w/rP5V8NRquGyEozcjPfEoXUlb+p7d9SUcmDSn14prOA==}
+    dev: true
 
   /three@0.160.0:
     resolution: {integrity: sha512-DLU8lc0zNIPkM7rH5/e1Ks1Z8tWCGRq6g8mPowdDJpw1CFBJMU7UoJjC6PefXW7z//SSl0b2+GCw14LB+uDhng==}
