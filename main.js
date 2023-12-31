@@ -1,6 +1,6 @@
 import * as THREE from "three";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
-import { World } from "cannon-es";
+import { World, Body, Box as BoxC, Vec3, Plane, Material } from "cannon-es";
 
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(
@@ -15,34 +15,29 @@ renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
 
 // camera
-camera.position.set(0, 0, 30);
+camera.position.set(0, 1, 30);
 camera.lookAt(0, 0, 0);
 
 // cube
 const geometry = new THREE.BoxGeometry(1, 1, 1);
-const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+const material = new THREE.MeshBasicMaterial({ color: 0xffcc00 });
 const cube = new THREE.Mesh(geometry, material);
 scene.add(cube);
 
-// line
-const lineMaterial = new THREE.LineBasicMaterial({ color: 0x00ff00 });
-const points = [];
-points.push(new THREE.Vector3(-10, 0, 0));
-points.push(new THREE.Vector3(0, 10, 0));
-points.push(new THREE.Vector3(10, 0, 0));
-points.push(new THREE.Vector3(0, -10, 0));
-points.push(new THREE.Vector3(-10, 0, 0));
-const lineGeometry = new THREE.BufferGeometry().setFromPoints(points);
-const line = new THREE.Line(lineGeometry, lineMaterial);
-scene.add(line);
+// ground
+const groundGeometry = new THREE.PlaneGeometry(100, 100);
+const groundMaterial = new THREE.MeshBasicMaterial({ color: 0x333333 });
+const ground = new THREE.Mesh(groundGeometry, groundMaterial);
+ground.rotation.x = -Math.PI / 2;
+scene.add(ground);
 
-// model
+// shiba
 let shiba;
 const loader = new GLTFLoader();
 loader.load(
   "shiba.glb",
   function (gltf) {
-    gltf.scene.position.set(0, 0, -3);
+    gltf.scene.position.set(0, -9, -50);
     shiba = gltf.scene;
     scene.add(gltf.scene);
   },
@@ -52,19 +47,42 @@ loader.load(
   }
 );
 
+// physics
+const world = new World();
+world.gravity.set(0, -9.82, 0);
+const cubeShape = new BoxC(new Vec3(1, 1, 1));
+const cubeBody = new Body({
+  mass: 1,
+  position: new Vec3(0, 5, 0),
+  shape: cubeShape,
+  material: new Material({ restitution: 1.0 }),
+});
+world.addBody(cubeBody);
+
+const groundShape = new Plane();
+const groundBody = new Body({
+  mass: 0,
+  material: new Material({ restitution: 1.0 }),
+});
+groundBody.addShape(groundShape);
+groundBody.position.set(0, -10, 0);
+groundBody.quaternion.setFromAxisAngle(new Vec3(1, 0, 0), -Math.PI / 2);
+ground.position.copy(groundBody.position);
+world.addBody(groundBody);
+
 function animate() {
   requestAnimationFrame(animate);
+  world.step(1 / 60);
+  cube.position.copy(cubeBody.position);
+  cube.quaternion.copy(cubeBody.quaternion);
+
   // shiba animation
   if (shiba) {
-    shiba.rotation.y += 0.05;
     shiba.position.x += 0.0;
     shiba.position.y += 0.0;
     shiba.position.z += 0.08;
   }
 
-  // cube animation
-  cube.rotation.x += 0.01;
-  cube.rotation.y += 0.01;
   renderer.render(scene, camera);
 }
 animate();
