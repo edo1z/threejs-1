@@ -7,6 +7,30 @@
       body {
         margin: 0;
       }
+      #hero {
+        position: absolute;
+        width: 100vw;
+        height: 100vh;
+      }
+			.button {
+				position: absolute;
+				top: 50%;
+				left: 50%;
+				transform: translate(-50%, -50%);
+				font-size: 30px;
+				color: #0f0;
+				background: #000;
+				border: solid 1px;
+				padding: 10px;
+				outline: none;
+				cursor: pointer;
+				text-decoration: none;
+			}
+			.button:hover{
+				text-decoration: none;
+				color: #000;
+				background: #0f0;
+			}
       #title {
         position: absolute;
         top: 30%;
@@ -18,7 +42,10 @@
     </style>
   </head>
   <body>
-    <div id="title">Shiba</div>
-    <script type="module" src="/main.js"></script>
+    <div id="hero">
+      <div id="title">three.js study</div>
+      <a class="button" href="cannon_es.html">cannon-es使ってみた</a>
+    </div>
+    <script type="module" src="src/index.js"></script>
   </body>
 </html>
