@@ -12,27 +12,29 @@
         width: 100vw;
         height: 100vh;
       }
-			.button {
-				position: absolute;
-				top: 50%;
-				left: 50%;
-				transform: translate(-50%, -50%);
-				font-size: 30px;
-				color: #0f0;
-				background: #000;
-				border: solid 1px;
-				padding: 10px;
-				outline: none;
-				cursor: pointer;
-				text-decoration: none;
+			.container {
+				position: relative;
+				width: 100%;
+				margin-top: 100px;
+				padding: 20px;
 			}
-			.button:hover{
-				text-decoration: none;
-				color: #000;
-				background: #0f0;
-			}
+      .button {
+        font-size: 20px;
+        color: #0f0;
+        background: #000;
+        border: solid 1px;
+        padding: 10px;
+        outline: none;
+        cursor: pointer;
+        text-decoration: none;
+      }
+      .button:hover {
+        text-decoration: none;
+        color: #000;
+        background: #0f0;
+      }
       #title {
-        position: absolute;
+        position: relative;
         top: 30%;
         left: 50%;
         transform: translate(-50%, -50%);
@@ -43,8 +45,11 @@
   </head>
   <body>
     <div id="hero">
-      <div id="title">three.js study</div>
-      <a class="button" href="cannon_es.html">cannon-es使ってみた</a>
+      <div class="container">
+        <div id="title">three.js study</div>
+        <a class="button" href="cannon_es.html">cannon-es使ってみた</a>
+        <a class="button" href="wasd.html">wasdで移動してみた</a>
+      </div>
     </div>
     <script type="module" src="src/index.js"></script>
   </body>
