@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ja">
   <head>
     <meta charset="utf-8" />
     <title>My first three.js app</title>
@@ -12,12 +12,12 @@
         width: 100vw;
         height: 100vh;
       }
-			.container {
-				position: relative;
-				width: 100%;
-				margin-top: 100px;
-				padding: 20px;
-			}
+      .container {
+        position: relative;
+        width: 100%;
+        margin-top: 100px;
+        padding: 20px;
+      }
       .button {
         font-size: 20px;
         color: #0f0;
@@ -27,6 +27,7 @@
         outline: none;
         cursor: pointer;
         text-decoration: none;
+        margin: 5px;
       }
       .button:hover {
         text-decoration: none;
@@ -47,10 +48,13 @@
     <div id="hero">
       <div class="container">
         <div id="title">three.js study</div>
-        <a class="button" href="cannon_es.html">cannon-es使ってみた</a>
-        <a class="button" href="wasd.html">wasdで移動してみた</a>
+        <a class="button" href="/page/cannon_es.html">cannon-es使ってみた</a>
+        <a class="button" href="/page/wasd.html">wasdで移動してみた</a>
+        <a class="button" href="/page/button_color_change.html">
+          ボタン押すと色変わる
+        </a>
       </div>
     </div>
-    <script type="module" src="src/index.js"></script>
+    <script type="module" src="/js/index.js"></script>
   </body>
 </html>

@@ -35,7 +35,7 @@ scene.add(ground);
 let shiba;
 const loader = new GLTFLoader();
 loader.load(
-  "shiba.glb",
+  "../model/shiba.glb",
   function (gltf) {
     gltf.scene.position.set(0, -9, -50);
     shiba = gltf.scene;

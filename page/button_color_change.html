@@ -1,0 +1,52 @@
+  <head>
+    <meta charset="utf-8" />
+    <title>ボタン押すと色変わる</title>
+    <style>
+      body {
+        margin: 0;
+      }
+      #navbar {
+        box-sizing: border-box;
+        position: absolute;
+        width: 100vw;
+        height: 10vh;
+        color: #0f0;
+        padding: 10px;
+      }
+      #logo a{
+        position: relative;
+        font-size: 20px;
+        color: #0f0;
+        text-decoration: none;
+      }
+      #title {
+        position: relative;
+        font-size: 15px;
+        color: #0fc;
+      }
+      #colorChangeButton {
+        position: absolute;
+        top: 20vh;
+        left: 50vw;
+        transform: translateX(-50%);
+        width: 200px;
+        height: 50px;
+        font-size: 20px;
+        color: #fff;
+        background-color: #f00;
+        border: none;
+        border-radius: 10px;
+        outline: none;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="navbar">
+      <div id="logo"><a href="/"> three.js study</a></div>
+      <div id="title">ボタン押すと色変わる</div>
+    </div>
+    <button id="colorChangeButton">色を変える</button>
+    <script type="module" src="/js/button_color_change.js"></script>
+  </body>
+</html>
