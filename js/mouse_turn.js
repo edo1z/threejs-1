@@ -26,8 +26,8 @@ const createTileFloor = (tileWidth, tileHeight, tilesX, tilesY) => {
         color: (i + j) % 2 === 0 ? 0x666666 : 0x333333,
       });
       const tile = new THREE.Mesh(geometry, material);
-      tile.position.x = i * tileWidth - (tileWidth * tilesX / 2);
-      tile.position.z = j * tileHeight - (tileHeight * tilesY / 2);
+      tile.position.x = i * tileWidth - (tileWidth * tilesX) / 2;
+      tile.position.z = j * tileHeight - (tileHeight * tilesY) / 2;
       tile.position.y = 0;
       tile.rotation.x = -Math.PI / 2;
       scene.add(tile);
@@ -93,6 +93,15 @@ window.addEventListener(
   },
   true
 );
+
+// plyaer rotation
+let playerRotation = 0;
+document.addEventListener("mousemove", onMouseMove, false);
+function onMouseMove(event) {
+  const mouseX = (event.clientX / window.innerWidth) * 5 - 1;
+  playerRotation = -mouseX * Math.PI;
+  player.rotation.y = playerRotation;
+}
 
 function animate() {
   if (keyState["w"]) player.position.z -= moveSpeed;
