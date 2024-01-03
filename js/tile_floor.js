@@ -24,8 +24,8 @@ scene.add(cube);
 cube.position.set(0, 0.5, 0);
 
 // light
-const light = new THREE.AmbientLight( 0xffffff, 5 );
-scene.add( light )
+const light = new THREE.AmbientLight(0xffffff, 5);
+scene.add(light);
 
 // tile floor
 const tileWidth = 5; // タイルの幅
@@ -36,7 +36,9 @@ const tilesY = 20; // Y方向のタイル数CORSAIR DDR4-3200MHzCORSAIR DDR4-320
 for (let i = 0; i < tilesX; i++) {
   for (let j = 0; j < tilesY; j++) {
     const geometry = new THREE.PlaneGeometry(tileWidth, tileHeight);
-    const material = new THREE.MeshLambertMaterial({ color: (i + j) % 2 === 0 ? 0x666666 : 0x333333 });
+    const material = new THREE.MeshLambertMaterial({
+      color: (i + j) % 2 === 0 ? 0x666666 : 0x333333,
+    });
     const tile = new THREE.Mesh(geometry, material);
     tile.position.x = i * tileWidth - 50;
     tile.position.z = j * tileHeight - 50;
@@ -45,6 +47,21 @@ for (let i = 0; i < tilesX; i++) {
     scene.add(tile);
   }
 }
+
+// skybox
+const loader = new THREE.CubeTextureLoader();
+loader.setPath("../skybox/");
+
+const cubeTexture = loader.load([
+  "px.jpg",
+  "nx.jpg",
+  "py.jpg",
+  "ny.jpg",
+  "pz.jpg",
+  "nz.jpg",
+]);
+
+scene.background = cubeTexture;
 
 function animate() {
   requestAnimationFrame(animate);
