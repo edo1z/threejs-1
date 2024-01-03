@@ -31,7 +31,7 @@ scene.add(light);
 const tileWidth = 5; // タイルの幅
 const tileHeight = 5; // タイルの高さ
 const tilesX = 20; // X方向のタイル数
-const tilesY = 20; // Y方向のタイル数CORSAIR DDR4-3200MHzCORSAIR DDR4-3200MHz
+const tilesY = 20; // Y方向のタイル数
 
 for (let i = 0; i < tilesX; i++) {
   for (let j = 0; j < tilesY; j++) {
