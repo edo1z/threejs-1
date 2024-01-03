@@ -47,12 +47,12 @@ const renderer = new THREE.WebGLRenderer();
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
 
-// camera
-camera.position.set(0, 10, 50);
-camera.lookAt(0, 0, -50);
-
 const player = createPlayer(0xffcc00, 0xcc2211);
 scene.add(player);
+
+// camera
+camera.position.set(0, 5, 17);
+player.add(camera)
 
 // light
 const light = new THREE.AmbientLight(0xffffff, 2);
@@ -76,7 +76,7 @@ const cubeTexture = loader.load([
 
 scene.background = cubeTexture;
 
-let moveSpeed = 0.2;
+let moveSpeed = 0.5;
 
 let keyState = {};
 window.addEventListener(
