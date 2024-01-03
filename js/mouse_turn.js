@@ -104,10 +104,22 @@ function onMouseMove(event) {
 }
 
 function animate() {
-  if (keyState["w"]) player.position.z -= moveSpeed;
-  if (keyState["s"]) player.position.z += moveSpeed;
-  if (keyState["a"]) player.position.x -= moveSpeed;
-  if (keyState["d"]) player.position.x += moveSpeed;
+  if (keyState["w"]) {
+    player.position.x -= moveSpeed * Math.sin(playerRotation);
+    player.position.z -= moveSpeed * Math.cos(playerRotation);
+  }
+  if (keyState["s"]) {
+    player.position.x += moveSpeed * Math.sin(playerRotation);
+    player.position.z += moveSpeed * Math.cos(playerRotation);
+  }
+  if (keyState["a"]) {
+    player.position.x -= moveSpeed * Math.cos(playerRotation);
+    player.position.z += moveSpeed * Math.sin(playerRotation);
+  }
+  if (keyState["d"]) {
+    player.position.x += moveSpeed * Math.cos(playerRotation);
+    player.position.z -= moveSpeed * Math.sin(playerRotation);
+  }
 
   requestAnimationFrame(animate);
   renderer.render(scene, camera);
