@@ -2,10 +2,13 @@ import * as THREE from "three";
 
 let ws;
 let uuid;
+let lastRotation = 0;
 
 document.getElementById("connect").addEventListener("click", function () {
   const name = document.getElementById("name").value;
+  const connectButton = document.getElementById("connect");
   if (name) {
+    connectButton.style.display = "none";
     ws = new WebSocket("ws://localhost:8080");
     uuid = generateUUID();
     localStorage.setItem("playerId", uuid);
@@ -39,10 +42,12 @@ document.getElementById("connect").addEventListener("click", function () {
             user.position.y,
             user.position.z
           );
+          otherPlayer.mesh.rotation.y = user.rotation; // プレイヤーの向きを更新
         } else {
           // 新規プレイヤーを作成
           const mesh = createPlayer(0xffcc00, 0xcc2211);
           mesh.position.set(user.position.x, user.position.y, user.position.z);
+          mesh.rotation.y = user.rotation; // プレイヤーの向きを設定
           scene.add(mesh);
 
           // 他のプレイヤー配列に追加
@@ -56,10 +61,12 @@ document.getElementById("connect").addEventListener("click", function () {
 
     ws.onerror = function (error) {
       console.log(`WebSocketエラー: ${error}`);
+      connectButton.style.display = "block";
     };
 
     ws.onclose = function () {
       console.log("サーバーから切断されました");
+      connectButton.style.display = "block";
     };
   } else {
     alert("名前を入力してください");
@@ -178,7 +185,7 @@ function onMouseMove(event) {
 }
 
 function animate() {
-  let moved = false;
+  let changed = false;
   let position = {
     x: player.position.x,
     y: player.position.y,
@@ -188,27 +195,28 @@ function animate() {
   if (keyState["w"]) {
     player.position.x -= moveSpeed * Math.sin(playerRotation);
     player.position.z -= moveSpeed * Math.cos(playerRotation);
-    moved = true;
+    changed = true;
   }
   if (keyState["s"]) {
     player.position.x += moveSpeed * Math.sin(playerRotation);
     player.position.z += moveSpeed * Math.cos(playerRotation);
-    moved = true;
+    changed = true;
   }
   if (keyState["a"]) {
     player.position.x -= moveSpeed * Math.cos(playerRotation);
     player.position.z += moveSpeed * Math.sin(playerRotation);
-    moved = true;
+    changed = true;
   }
   if (keyState["d"]) {
     player.position.x += moveSpeed * Math.cos(playerRotation);
     player.position.z -= moveSpeed * Math.sin(playerRotation);
-    moved = true;
+    changed = true;
   }
 
-  // 移動したら、WebSocketでUUIDと位置情報を送信
-  if (moved) {
-    ws.send(JSON.stringify({ mode: "move", uuid: uuid, position: position }));
+  // 移動または回転したら、WebSocketでUUIDと位置情報を送信
+  if (changed || player.rotation.y !== lastRotation) {
+    ws.send(JSON.stringify({ mode: "move", uuid: uuid, position: position, rotation: playerRotation }));
+    lastRotation = player.rotation.y;
   }
 
   requestAnimationFrame(animate);

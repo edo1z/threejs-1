@@ -17,6 +17,7 @@ wss.on("connection", (ws) => {
           uuid: data.uuid,
           name: data.name,
           position: { x: 0, y: 0, z: 0 },
+          rotation: 0,
         };
         users.push(user);
         break;
@@ -24,6 +25,7 @@ wss.on("connection", (ws) => {
         user = users.find((user) => user.uuid === data.uuid);
         if (user) {
           user.position = data.position;
+          user.rotation = data.rotation;
         }
         break;
       case "message":
