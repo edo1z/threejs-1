@@ -25,10 +25,11 @@ document.getElementById("connect").addEventListener("click", function () {
 
     ws.onmessage = function (event) {
       // サーバーから受け取ったユーザー配列情報
-      const users = JSON.parse(event.data);
+      const serverUsers = JSON.parse(event.data);
+      const serverUserUUIDs = serverUsers.map((user) => user.uuid);
 
       // 他のプレイヤーの情報を更新
-      users.forEach((user) => {
+      serverUsers.forEach((user) => {
         // 自分自身の情報はスキップ
         if (user.uuid === uuid) return;
 
@@ -67,8 +68,7 @@ document.getElementById("connect").addEventListener("click", function () {
           div.textContent = user.name;
           const label = new CSS2DObject(div);
           label.center.set(0, 0);
-          label.position.y = 2;
-          label.position.z = -0.5;
+          label.position.set(0, 2, 0);
           label.layers.set(1);
           mesh.add(label);
 
@@ -78,6 +78,22 @@ document.getElementById("connect").addEventListener("click", function () {
             mesh: mesh,
           });
         }
+      });
+
+      // サーバーから削除されたユーザーをotherPlayersからも削除
+      otherPlayers = otherPlayers.filter((player) => {
+        if (!serverUserUUIDs.includes(player.uuid)) {
+          scene.remove(player.mesh);
+          player.mesh.children.forEach((child) => {
+            console.log("さがす");
+            if (child instanceof CSS2DObject) {
+              console.log("発見");
+              player.mesh.remove(child);
+            }
+          });
+          return false;
+        }
+        return true;
       });
     };
 

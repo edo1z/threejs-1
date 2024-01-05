@@ -20,6 +20,7 @@ wss.on("connection", (ws) => {
           rotation: 0,
         };
         users.push(user);
+        ws.uuid = data.uuid;
         break;
       case "move":
         user = users.find((user) => user.uuid === data.uuid);
@@ -41,6 +42,7 @@ wss.on("connection", (ws) => {
 
   ws.on("close", () => {
     console.log("Client has disconnected");
+    users = users.filter((user) => user.uuid !== ws.uuid);
   });
 });
 
