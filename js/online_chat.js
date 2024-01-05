@@ -1,8 +1,13 @@
 import * as THREE from "three";
+import {
+  CSS2DRenderer,
+  CSS2DObject,
+} from "three/addons/renderers/CSS2DRenderer.js";
 
 let ws;
 let uuid;
 let lastRotation = 0;
+let otherPlayers = [];
 
 document.getElementById("connect").addEventListener("click", function () {
   const name = document.getElementById("name").value;
@@ -17,9 +22,6 @@ document.getElementById("connect").addEventListener("click", function () {
       ws.send(JSON.stringify({ mode: "new", name: name, uuid: uuid }));
       animate();
     };
-
-    // 他のプレイヤーを保持する配列
-    let otherPlayers = [];
 
     ws.onmessage = function (event) {
       // サーバーから受け取ったユーザー配列情報
@@ -58,6 +60,17 @@ document.getElementById("connect").addEventListener("click", function () {
           mesh.position.set(user.position.x, user.position.y, user.position.z);
           mesh.rotation.y = user.rotation; // プレイヤーの向きを設定
           scene.add(mesh);
+
+          // プレイヤーの名前を表示する要素を作成
+          const div = document.createElement("div");
+          div.className = "label";
+          div.textContent = user.name;
+          const label = new CSS2DObject(div);
+          label.center.set(0, 0);
+          label.position.y = 2;
+          label.position.z = -0.5;
+          label.layers.set(1);
+          mesh.add(label);
 
           // 他のプレイヤー配列に追加
           otherPlayers.push({
@@ -137,11 +150,20 @@ const renderer = new THREE.WebGLRenderer();
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
 
+// label renderer
+const labelRenderer = new CSS2DRenderer();
+labelRenderer.setSize(window.innerWidth, window.innerHeight);
+labelRenderer.domElement.style.position = "absolute";
+labelRenderer.domElement.style.top = "0px";
+labelRenderer.domElement.style.zIndex = "1";
+document.body.appendChild(labelRenderer.domElement);
+
 const player = createPlayer(0xffcc00, 0xcc2211);
 scene.add(player);
 
 // camera
 camera.position.set(0, 5, 17);
+camera.layers.enableAll();
 player.add(camera);
 
 // light
@@ -237,4 +259,5 @@ function animate() {
 
   requestAnimationFrame(animate);
   renderer.render(scene, camera);
+  labelRenderer.render(scene, camera);
 }
