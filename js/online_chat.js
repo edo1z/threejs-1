@@ -37,12 +37,21 @@ document.getElementById("connect").addEventListener("click", function () {
 
         if (otherPlayer) {
           // 既存のプレイヤーの位置を更新
-          otherPlayer.mesh.position.set(
-            user.position.x,
-            user.position.y,
-            user.position.z
+          otherPlayer.mesh.position.lerp(
+            new THREE.Vector3(
+              user.position.x,
+              user.position.y,
+              user.position.z
+            ),
+            0.5
           );
-          otherPlayer.mesh.rotation.y = user.rotation; // プレイヤーの向きを更新
+          // プレイヤーの向きを更新
+          otherPlayer.mesh.quaternion.slerp(
+            new THREE.Quaternion().setFromEuler(
+              new THREE.Euler(0, user.rotation, 0)
+            ),
+            0.5
+          );
         } else {
           // 新規プレイヤーを作成
           const mesh = createPlayer(0xffcc00, 0xcc2211);
@@ -215,7 +224,14 @@ function animate() {
 
   // 移動または回転したら、WebSocketでUUIDと位置情報を送信
   if (changed || player.rotation.y !== lastRotation) {
-    ws.send(JSON.stringify({ mode: "move", uuid: uuid, position: position, rotation: playerRotation }));
+    ws.send(
+      JSON.stringify({
+        mode: "move",
+        uuid: uuid,
+        position: position,
+        rotation: playerRotation,
+      })
+    );
     lastRotation = player.rotation.y;
   }
 
